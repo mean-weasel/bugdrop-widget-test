@@ -78,10 +78,10 @@ function App() {
             <a href="#api-demo">
               API Demo ↓
             </a>
-            <a href="https://github.com/neonwatty/bugdrop" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/mean-weasel/bugdrop" target="_blank" rel="noopener noreferrer">
               GitHub
             </a>
-            <a href="https://github.com/apps/neonwatty-bugdrop/installations/new" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/apps/bugdrop/installations/new" target="_blank" rel="noopener noreferrer">
               Install Free
             </a>
           </div>
@@ -503,15 +503,15 @@ function App() {
           <h2>Like this feedback widget?</h2>
           <p>Add BugDrop to your site in 2 minutes. Free, open source, and creates GitHub Issues automatically.</p>
           <div className="bugdrop-cta-buttons">
-            <a href="https://github.com/apps/neonwatty-bugdrop/installations/new" target="_blank" rel="noopener noreferrer" className="btn btn-bugdrop-primary">
+            <a href="https://github.com/apps/bugdrop/installations/new" target="_blank" rel="noopener noreferrer" className="btn btn-bugdrop-primary">
               Install Free →
             </a>
-            <a href="https://github.com/neonwatty/bugdrop" target="_blank" rel="noopener noreferrer" className="btn btn-bugdrop-secondary">
+            <a href="https://github.com/mean-weasel/bugdrop" target="_blank" rel="noopener noreferrer" className="btn btn-bugdrop-secondary">
               View on GitHub
             </a>
           </div>
           <p className="bugdrop-cta-note">
-            See the <a href="https://github.com/neonwatty/feedback-widget-test/issues" target="_blank" rel="noopener noreferrer">issues created by this demo</a>
+            See the <a href="https://github.com/mean-weasel/bugdrop-widget-test/issues" target="_blank" rel="noopener noreferrer">issues created by this demo</a>
           </p>
         </div>
       </section>
@@ -521,11 +521,11 @@ function App() {
         <div className="footer-content">
           <div className="footer-bugdrop">
             <span>🐛</span> Powered by{' '}
-            <a href="https://github.com/neonwatty/bugdrop" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/mean-weasel/bugdrop" target="_blank" rel="noopener noreferrer">
               <strong>BugDrop</strong>
             </a>
             {' — free to install & self-host · '}
-            <a href="https://github.com/apps/neonwatty-bugdrop/installations/new" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/apps/bugdrop/installations/new" target="_blank" rel="noopener noreferrer">
               Install
             </a>
           </div>
@@ -551,7 +551,7 @@ function App() {
             <a href="#api-demo">
               API Demo
             </a>
-            <a href="https://github.com/apps/neonwatty-bugdrop/installations/new" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/apps/bugdrop/installations/new" target="_blank" rel="noopener noreferrer">
               Install
             </a>
           </div>
