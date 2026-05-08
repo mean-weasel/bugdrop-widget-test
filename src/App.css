@@ -99,6 +99,16 @@ html {
   color: #9bb8fc;
 }
 
+.demo-banner-links .demo-banner-back {
+  color: #ff9e64;
+  background: rgba(255, 158, 100, 0.16);
+}
+
+.demo-banner-links .demo-banner-back:hover {
+  color: #ffc096;
+  background: rgba(255, 158, 100, 0.26);
+}
+
 @media (max-width: 768px) {
   .demo-banner-content {
     flex-direction: column;
