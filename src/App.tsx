@@ -75,6 +75,9 @@ function App() {
             Screenshots, annotations, the works. Free & open source.
           </span>
           <div className="demo-banner-links">
+            <a href="https://bugdrop.dev" className="demo-banner-back">
+              Back to BugDrop
+            </a>
             <a href="#api-demo">
               API Demo ↓
             </a>
