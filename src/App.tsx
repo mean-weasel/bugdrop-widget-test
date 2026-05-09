@@ -536,11 +536,12 @@ function App() {
       </footer>
 
       {/* BugDrop Explainer Callout */}
+      <div className="feedback-button-spotlight" aria-hidden="true"></div>
       <div className="bugdrop-explainer">
         <div className="explainer-content">
           <span className="explainer-title">Try BugDrop</span>
           <span className="explainer-desc">In-app feedback → GitHub Issues</span>
-          <span className="explainer-note">Dismissed the button? Click below to restore it</span>
+          <span className="explainer-note">Use the feedback button below to send a test report</span>
           <div className="explainer-links">
             <span
               onClick={() => window.BugDrop?.show()}
