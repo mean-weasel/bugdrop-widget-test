@@ -1501,6 +1501,29 @@ body {
   filter: drop-shadow(0 0 12px rgba(255, 158, 100, 0.8));
 }
 
+@media (max-width: 768px) {
+  .bugdrop-explainer {
+    bottom: 92px;
+    right: 18px;
+  }
+
+  .explainer-content {
+    display: none;
+  }
+
+  .explainer-arrow {
+    font-size: 2rem;
+    margin-right: 10px;
+  }
+
+  .feedback-button-spotlight {
+    right: 8px;
+    bottom: 8px;
+    width: 92px;
+    height: 92px;
+  }
+}
+
 @keyframes point-bounce {
   0%, 100% {
     transform: translate(0, 0);
