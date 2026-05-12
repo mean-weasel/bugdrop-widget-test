@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BugDrop Redaction Failure Fixture</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        padding: 96px;
+        background: #101828;
+        color: #e5e7eb;
+        font-family: Arial, sans-serif;
+      }
+
+      main {
+        max-width: 860px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        margin: 0 0 12px;
+        font-size: 32px;
+      }
+
+      p {
+        margin: 0 0 32px;
+        color: #aeb7c8;
+      }
+
+      .fixture-panel {
+        padding: 28px;
+        background: #182235;
+        border: 1px solid #31405c;
+        border-radius: 12px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #cbd5e1;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      input {
+        width: min(420px, 100%);
+        height: 72px;
+        padding: 0 20px;
+        background: #dc2626;
+        border: 2px solid #fecaca;
+        border-radius: 12px;
+        color: #ffffff;
+        font-size: 24px;
+        font-weight: 700;
+      }
+    </style>
+    <script>
+      (function () {
+        var NativeImage = window.Image;
+        var srcDescriptor = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'src');
+
+        window.Image = function BugDropFailureImage(width, height) {
+          var image = new NativeImage(width, height);
+
+          Object.defineProperty(image, 'src', {
+            configurable: true,
+            enumerable: true,
+            get: function () {
+              return srcDescriptor && srcDescriptor.get ? srcDescriptor.get.call(image) : '';
+            },
+            set: function (value) {
+              if (typeof value === 'string' && value.indexOf('data:image/png;base64,') === 0) {
+                setTimeout(function () {
+                  var event = new Event('error');
+                  image.dispatchEvent(event);
+                  if (typeof image.onerror === 'function') {
+                    image.onerror(event);
+                  }
+                }, 0);
+                return;
+              }
+
+              if (srcDescriptor && srcDescriptor.set) {
+                srcDescriptor.set.call(image, value);
+              } else {
+                image.setAttribute('src', value);
+              }
+            },
+          });
+
+          return image;
+        };
+        window.Image.prototype = NativeImage.prototype;
+        Object.setPrototypeOf(window.Image, NativeImage);
+      })();
+    </script>
+  </head>
+  <body>
+    <main>
+      <h1>Redaction Failure Fixture</h1>
+      <p>Fixture used to verify the privacy masking failure UX without widget test hooks.</p>
+
+      <section class="fixture-panel">
+        <label for="redacted-test-input">Marked private</label>
+        <input
+          id="redacted-test-input"
+          type="text"
+          data-bugdrop-redact
+          value="sk_live_failure_test_secret"
+        />
+      </section>
+    </main>
+
+    <script
+      src="https://bugdrop.neonwatty.workers.dev/widget.js"
+      data-repo="mean-weasel/bugdrop-widget-test"
+      data-theme="dark"
+      data-color="#ff9e64"
+    ></script>
+  </body>
+</html>
