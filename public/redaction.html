@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BugDrop Redaction Fixture</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        padding: 96px;
+        background: #101828;
+        color: #e5e7eb;
+        font-family: Arial, sans-serif;
+      }
+
+      main {
+        max-width: 860px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        margin: 0 0 12px;
+        font-size: 32px;
+      }
+
+      p {
+        margin: 0 0 32px;
+        color: #aeb7c8;
+      }
+
+      .fixture-panel {
+        padding: 28px;
+        background: #182235;
+        border: 1px solid #31405c;
+        border-radius: 12px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #cbd5e1;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .redacted-field {
+        width: min(420px, 100%);
+        height: 72px;
+        padding: 0 20px;
+        background: #dc2626;
+        border: 2px solid #fecaca;
+        border-radius: 12px;
+        color: #ffffff;
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      .plain-field {
+        width: min(420px, 100%);
+        height: 52px;
+        margin-top: 24px;
+        padding: 0 16px;
+        background: #0f172a;
+        border: 1px solid #475569;
+        border-radius: 8px;
+        color: #e5e7eb;
+        font-size: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Redaction Fixture</h1>
+      <p>Fixture used to verify BugDrop screenshot redaction behavior.</p>
+
+      <section class="fixture-panel">
+        <label for="redacted-test-input">Marked private</label>
+        <input
+          id="redacted-test-input"
+          class="redacted-field"
+          type="text"
+          data-bugdrop-redact
+          value="sk_live_preview_test_secret"
+        />
+
+        <label for="plain-test-input" style="margin-top: 24px">Unmarked field</label>
+        <input
+          id="plain-test-input"
+          class="plain-field"
+          type="text"
+          value="ordinary visible value"
+        />
+      </section>
+    </main>
+
+    <script
+      src="https://bugdrop-preview.neonwatty.workers.dev/widget.js"
+      data-repo="mean-weasel/bugdrop-widget-test"
+      data-theme="dark"
+      data-color="#ff9e64"
+    ></script>
+  </body>
+</html>
