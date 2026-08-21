@@ -302,13 +302,28 @@ export async function runCleanup({
   }
 
   for (const issue of mutationIssues) {
-    const succeeded = await mutateIssue({
-      repository,
-      number: issue.number,
-      token,
-      fetchImpl,
-      summary,
-    });
+    let succeeded;
+    try {
+      succeeded = await mutateIssue({
+        repository,
+        number: issue.number,
+        token,
+        fetchImpl,
+        summary,
+      });
+    } catch (cause) {
+      const error =
+        cause instanceof Error ? cause : new Error(String(cause));
+      summary.failed.push({
+        number: issue.number,
+        stage: summary.closed.includes(issue.number)
+          ? "label-after-close"
+          : "close",
+        message: error.message,
+      });
+      error.summary = summary;
+      throw error;
+    }
     if (!succeeded) break;
   }
   return summary;

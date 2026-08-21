@@ -187,6 +187,39 @@ test("reports close-without-label partial failure and stops", async () => {
   assert.deepEqual(calls.map(({ method }) => method), ["GET", "PATCH", "POST"]);
 });
 
+test("preserves partial mutation evidence when the label request throws", async () => {
+  const calls = [];
+  const fetchImpl = async (url, options) => {
+    calls.push({ url: String(url), ...options });
+    if (options.method === "GET") return jsonResponse([issue({ number: 6 })]);
+    if (options.method === "POST") throw new Error("network timeout");
+    return jsonResponse({ ok: true });
+  };
+  await assert.rejects(
+    runCleanup({
+      repository,
+      token,
+      dryRun: false,
+      nowMs,
+      fetchImpl,
+      expectedEligibleNumbers: [6],
+    }),
+    (error) => {
+      assert.deepEqual(error.summary.closed, [6]);
+      assert.deepEqual(error.summary.labeled, []);
+      assert.deepEqual(error.summary.failed, [
+        {
+          number: 6,
+          stage: "label-after-close",
+          message: "network timeout",
+        },
+      ]);
+      return true;
+    },
+  );
+  assert.deepEqual(calls.map(({ method }) => method), ["GET", "PATCH", "POST"]);
+});
+
 test("stops over-cap batches before any mutation", async () => {
   const methods = [];
   const fetchImpl = async (_url, options) => {
