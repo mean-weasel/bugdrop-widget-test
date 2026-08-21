@@ -40,11 +40,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DRY_RUN: ${{ github.event_name == 'schedule' && 'false' || inputs.dry_run }}
-          EXPECTED_ISSUES: ${{ github.event_name == 'schedule' && 'scheduled' || inputs.expected_issues }}
+          EXECUTION: ${{ github.event_name == 'schedule' && 'scheduled' || 'manual' }}
+          EXPECTED_ISSUES: ${{ inputs.expected_issues || '' }}
         run: |
           node scripts/cleanup-homepage-demo-issues.mjs \
           --repository=mean-weasel/bugdrop-widget-test \
           --cutoff-hours=24 \
           --max-eligible=100 \
+          "--execution=${EXECUTION}" \
           "--dry-run=${DRY_RUN}" \
           "--expected-issues=${EXPECTED_ISSUES}"

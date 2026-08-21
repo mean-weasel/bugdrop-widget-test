@@ -34,8 +34,10 @@ test("workflow pins the exact cleanup boundary", async () => {
   );
   assert.match(
     workflow,
-    /EXPECTED_ISSUES: \$\{\{ github\.event_name == 'schedule' && 'scheduled' \|\| inputs\.expected_issues \}\}/,
+    /EXECUTION: \$\{\{ github\.event_name == 'schedule' && 'scheduled' \|\| 'manual' \}\}/,
   );
+  assert.match(workflow, /EXPECTED_ISSUES: \$\{\{ inputs\.expected_issues \|\| '' \}\}/);
+  assert.match(workflow, /"--execution=\$\{EXECUTION\}"/);
   assert.match(workflow, /"--dry-run=\$\{DRY_RUN\}"/);
   assert.match(workflow, /"--expected-issues=\$\{EXPECTED_ISSUES\}"/);
 });

@@ -238,7 +238,7 @@ test("stops over-cap batches before any mutation", async () => {
       nowMs,
       fetchImpl,
       maxEligible: 2,
-      expectedEligibleNumbers: "scheduled",
+      execution: "scheduled",
     }),
     (error) => {
       assert.match(error.message, /exceeds safety cap 2/);
@@ -301,6 +301,27 @@ test("manual live mode rejects an empty authorization before mutation", async ()
   assert.deepEqual(methods, ["GET"]);
 });
 
+test("manual live mode cannot select scheduled behavior through its Issue input", async () => {
+  const methods = [];
+  const fetchImpl = async (_url, options) => {
+    methods.push(options.method);
+    return jsonResponse([issue({ number: 75 })]);
+  };
+  await assert.rejects(
+    runCleanup({
+      repository,
+      token,
+      dryRun: false,
+      nowMs,
+      fetchImpl,
+      execution: "manual",
+      expectedEligibleNumbers: [Number("scheduled")],
+    }),
+    /positive Issue numbers/,
+  );
+  assert.deepEqual(methods, ["GET"]);
+});
+
 test("manual live mode mutates only the exact authorized subset", async () => {
   const calls = [];
   const fetchImpl = async (url, options) => {
@@ -352,7 +373,7 @@ test("scheduled rerun after closure is idempotent", async () => {
     dryRun: false,
     nowMs,
     fetchImpl,
-    expectedEligibleNumbers: "scheduled",
+    execution: "scheduled",
   });
   assert.deepEqual(summary.eligible, []);
   assert.deepEqual(methods, ["GET"]);

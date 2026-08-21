@@ -216,11 +216,15 @@ export async function runCleanup({
   fetchImpl = fetch,
   maxEligible = 100,
   expectedEligibleNumbers = [],
+  execution = "manual",
 }) {
   assertRepository(repository);
   assertBounds(cutoffHours, maxEligible);
   requestHeaders(token);
   if (typeof dryRun !== "boolean") throw new Error("dryRun must be a boolean");
+  if (!new Set(["manual", "scheduled"]).has(execution)) {
+    throw new Error("execution must be manual or scheduled");
+  }
 
   const issues = await readOpenBugDropIssues({ repository, token, fetchImpl });
   const eligibleIssues = selectEligibleHomepageDemoIssues(
@@ -243,7 +247,7 @@ export async function runCleanup({
   if (dryRun) return summary;
 
   let mutationIssues;
-  if (expectedEligibleNumbers === "scheduled") {
+  if (execution === "scheduled") {
     if (eligibleIssues.length > maxEligible) {
       const error = new Error(
         `Eligible Issue count ${eligibleIssues.length} exceeds safety cap ${maxEligible}`,
@@ -336,6 +340,7 @@ function parseCliArguments(argv) {
     "cutoff-hours",
     "max-eligible",
     "expected-issues",
+    "execution",
   ]);
   const values = new Map();
   for (const argument of argv) {
@@ -356,14 +361,12 @@ function parseCliArguments(argv) {
     dryRun: values.get("dry-run") === "true",
     cutoffHours: Number(values.get("cutoff-hours")),
     maxEligible: Number(values.get("max-eligible")),
-    expectedEligibleNumbers:
-      values.get("expected-issues") === "scheduled"
-        ? "scheduled"
-        : values
-            .get("expected-issues")
-            .split(",")
-            .filter(Boolean)
-            .map((value) => Number(value)),
+    expectedEligibleNumbers: values
+      .get("expected-issues")
+      .split(",")
+      .filter(Boolean)
+      .map((value) => Number(value)),
+    execution: values.get("execution"),
   };
 }
 
