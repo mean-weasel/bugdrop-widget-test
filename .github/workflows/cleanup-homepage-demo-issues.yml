@@ -1,0 +1,52 @@
+name: Cleanup homepage demo Issues
+
+on:
+  schedule:
+    - cron: "23 4 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Report candidates without closing them
+        required: true
+        default: true
+        type: boolean
+      expected_issues:
+        description: Comma-separated Issue numbers from the authorized dry run; required for live manual runs
+        required: false
+        default: ""
+        type: string
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: homepage-demo-issue-cleanup
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    if: github.event_name == 'workflow_dispatch' || vars.HOMEPAGE_DEMO_CLEANUP_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run test:cleanup
+      - name: Cleanup expired homepage demo Issues
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: ${{ github.event_name == 'schedule' && 'false' || inputs.dry_run }}
+          EXECUTION: ${{ github.event_name == 'schedule' && 'scheduled' || 'manual' }}
+          EXPECTED_ISSUES: ${{ inputs.expected_issues || '' }}
+        run: |
+          node scripts/cleanup-homepage-demo-issues.mjs \
+          --repository=mean-weasel/bugdrop-widget-test \
+          --cutoff-hours=24 \
+          --max-eligible=100 \
+          "--execution=${EXECUTION}" \
+          "--dry-run=${DRY_RUN}" \
+          "--expected-issues=${EXPECTED_ISSUES}"
